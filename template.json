@@ -1,0 +1,7 @@
+{
+  "name": "wails-vite-vue-ts-elementplus-pinia",
+  "shortname": "wvvtep",
+  "author": "id88",
+  "description": "A template for Wails with Vite + Vue + TypeScript + ElementPlus + Pinia.",
+  "helpurl": "https://github.com/id88/wails-vite-vue-ts-element"
+}
