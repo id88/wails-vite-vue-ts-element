@@ -15,6 +15,8 @@ cd my-wails-project
 wails dev
 ```
 
+<img src="./screenshot.png" alt="screenshot.png" style="zoom:70%;" />
+
 ## Live Development
 
 To run in live development mode, run `wails dev` in the project directory. In another terminal, go into the `frontend`
