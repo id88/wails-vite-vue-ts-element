@@ -25,35 +25,42 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
 
       - name: Install linux dependencies
         if: matrix.os == 'ubuntu-latest'
         run: |
-          sudo apt-get update -y && sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev build-essential pkg-config
+          sudo apt-get update -y && sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev build-essential pkg-config
 
       - name: Setup Go
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v6
         with:
-          go-version: '1.20'
+          go-version: '1.26'
       
-      - name: Setup Wails CLI v2.6.0
-        run: go install github.com/wailsapp/wails/v2/cmd/wails@v2.6.0
+      - name: Setup Wails CLI v2.12.0
+        run: go install github.com/wailsapp/wails/v2/cmd/wails@v2.12.0
 
       - name: Checkout Wails
         run: wails doctor
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v6
         with:
-          node-version: 18  
+          node-version: 22
 
       - name: Creating project with a template
         run: |
           cd ..
           wails init -n my-wails-project -t wails-vite-vue-ts-element
 
-      - name: Build Release Files
+      - name: Build Release Files (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          cd ../my-wails-project
+          wails build -tags webkit2_41
+
+      - name: Build Release Files (Windows/macOS)
+        if: matrix.os != 'ubuntu-latest'
         run: |
           cd ../my-wails-project
           wails build
@@ -72,12 +79,12 @@ jobs:
           cp -r ../my-wails-project/build/bin/* build/bin/
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build_on_${{ matrix.os }}
           path: build/bin
           retention-days: 5
-# If you use `actions/upload-artifact@v3`, you must know:
+# If you use `actions/upload-artifact@v4`, you must know:
 # - Relative pathing '.' and '..' is not allowed. See #176
 # - 'working-directory' cannot be set here
 # - A step cannot have both the `uses` and `run` keys
