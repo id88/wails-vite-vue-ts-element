@@ -36,6 +36,7 @@ jobs:
         uses: actions/setup-go@v6
         with:
           go-version: '1.26'
+          cache: false  # Template project has no go.mod (uses go.tmpl.mod)
       
       - name: Setup Wails CLI v2.12.0
         run: go install github.com/wailsapp/wails/v2/cmd/wails@v2.12.0
@@ -79,12 +80,12 @@ jobs:
           cp -r ../my-wails-project/build/bin/* build/bin/
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: build_on_${{ matrix.os }}
           path: build/bin
           retention-days: 5
-# If you use `actions/upload-artifact@v4`, you must know:
+# If you use `actions/upload-artifact@v6`, you must know:
 # - Relative pathing '.' and '..' is not allowed. See #176
 # - 'working-directory' cannot be set here
 # - A step cannot have both the `uses` and `run` keys
